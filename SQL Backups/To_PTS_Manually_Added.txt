@@ -1,0 +1,13 @@
+INSERT INTO `tbl_ptsdata` (`pts_SlNo`, `app_SlNo`, `pts_ApplicationName`, `pts_ProjectNum`, `pts_ChargeTo`, `pts_CRNum`, `pts_ReleaseDate`, `pts_ProjectName`, `pts_commit_status`, `pts_DTVResources`, `pts_IBMPrep`, `pts_IBMExec`, `pts_DTVContractors`, `pts_IBMTnM`, `pts_IBMAS`) VALUES
+('', 46, 'Automation', 'Development', 'Development', 'Development', '2016-12-31', 'Development', 'Closed', 0, 0, 0, 0, 0, 0),
+('', 47, 'Gamification', 'Gamification', 'Gamification', 'Gamification', '2016-12-31', 'Gamification', 'Closed', 0, 0, 0, 0, 0, 0),
+('', 48, 'Test accelarators', 'DA', 'Test accelerators', 'Test accelerators', '2016-12-31', 'Test accelerators', 'Closed', 0, 0, 0, 0, 0, 0),
+('', 48, 'Test accelarators', 'Process', 'Test accelerators', 'Test accelerators', '2016-12-31', 'Test accelerators', 'Closed', 0, 0, 0, 0, 0, 0),
+('', 48, 'Test accelarators', 'CDM', 'Test accelerators', 'Test accelerators', '2016-12-31', 'Test accelerators', 'Closed', 0, 0, 0, 0, 0, 0),
+('', 48, 'Test accelarators', 'CTD', 'Test accelerators', 'Test accelerators', '2016-12-31', 'Test accelerators', 'Closed', 0, 0, 0, 0, 0, 0),
+('', 37, 'Test Data Management', 'PR000000 - COE FOR CAC1', '', 'PR000000 - COE FOR CAC1', '2016-12-31', 'PR000000 - COE FOR CAC1', 'Closed', 0, 0, 0, 0, 0, 0),
+('', 37, 'Test Data Management', 'PR000001 - R5 RE-DO OFFERS SETUP', 'PR000001 - R5 RE-DO OFFERS SETUP', 'PR000001 - R5 RE-DO OFFERS SETUP', '2016-12-31', 'PR000001 - R5 RE-DO OFFERS SETUP', 'Closed', 0, 0, 0, 0, 0, 0),
+('', 37, 'Test Data Management', 'PR000000 - COE for CAC2', '', 'PR000000 - COE for CAC2', '2016-12-31', 'PR000000 - COE FOR CAC2', 'Closed', 0, 0, 0, 0, 0, 0),
+('', 37, 'Test Data Management', 'PR000000 - COE for CAC3', '', 'PR000000 - COE for CAC3', '2016-12-31', 'PR000000 - COE FOR CAC3', 'Closed', 0, 0, 0, 0, 0, 0),
+('', 37, 'Test Data Management', 'PR000000 - COE for CAC4', '', 'PR000000 - COE for CAC4', '2016-12-31', 'PR000000 - COE FOR CAC4', 'Closed', 0, 0, 0, 0, 0, 0),
+('', 37, 'Test Data Management', 'PR000000 - COE for CAC5', '', 'PR000000 - COE for CAC5', '2016-12-31', 'PR000000 - COE FOR CAC5', 'Closed', 0, 0, 0, 0, 0, 0);

@@ -1,0 +1,6 @@
+Sub AppendToExistingOnLeft()
+    Dim c As Range
+    For Each c In Selection
+    If c.Value <> "" Then c.Value = "'" & c.Value
+    Next
+End Sub
