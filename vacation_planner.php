@@ -50,7 +50,18 @@ $rs_select_resource_name = $mysqli->query($sql_select_resource_name);
 $data_select_resource_name = mysqli_fetch_array($rs_select_resource_name);
 
 $resource_team = $data_select_resource_name['res_team']; //Team Name like TAOS
-
+$sql_select_application = "select * from " . $db . ".tbl_application where ";
+if(explode(',', $resource_team))
+{
+	$value =explode(',', $resource_team);
+	$count = sizeof($value);
+	for($i = 0; $i < $count; $i++) {
+		$sql_select_application .= "app_ApplicationName like '%" . $value[$i] . "%' ";
+		if($i != $count-1)
+			$sql_select_application .= ' or ';
+	}
+}
+$sql_select_application .= "order by app_ApplicationName";
 
 //Get app id from app name
 $sql_select_app_id = "select * from ".$db.".tbl_application where app_ApplicationName like '%".$resource_team."%' ";
@@ -123,7 +134,7 @@ $app_id = $data_select_app_id['app_SlNo']; // Team ID like 35
 									<td><select name="row[0][ddl_application][]" id="ddl_application[]" required="*"
 										style="border-radius: 8px; width: 130px; text-transform: capitalize;" class="form-control">
 												<?php
-												$sql_select_application = "select * from " . $db . ".tbl_application where app_ApplicationName like '%".$resource_team."%' order by app_ApplicationName";
+												//$sql_select_application = "select * from " . $db . ".tbl_application where app_ApplicationName like '%".$resource_team."%' order by app_ApplicationName";
 												//echo $sql_select_application;exit;
 												$rs_application = $mysqli->query ( $sql_select_application );
 												while ( $row = mysqli_fetch_array ( $rs_application ) ) {
