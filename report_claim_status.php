@@ -93,13 +93,27 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 			<span style="font-style: italic;font-weight: bold;"><?php echo $team_names;?> </span> application(s).</span>
         <br/><br/>
         <form action="report_claim_status.php" method="post">
-            <table class="rwd-table no-margin" style="font-weight: bold; color: black; width: 150px;">
-                <tr>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Action</th>
-                </tr>
-                <tr>
+                <table class="rwd-table no-margin" style="font-weight: bold; color: black; width: 150px;">
+                    <tr>
+                        <th>Select Team</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Action</th>
+                    </tr>
+                    <tr>
+                    <td>
+                        <select style="border-radius: 8px; width: 150px; text-transform: capitalize;" class="form-control" id="ddl_application" name="ddl_application">
+                        <?php
+                            $rs_application = $mysqli->query($sql_select_team_id_new);
+                            while($row = mysqli_fetch_array($rs_application))
+                            {
+                                ?>
+                             <option value="<?php echo $row['app_SlNo']; ?>" <?php if($_SERVER['REQUEST_METHOD'] == 'POST') {
+                                                     if($row['app_SlNo'] == $_REQUEST['ddl_application'])
+                                            echo 'selected="selected"'; }  ?>><?php echo $row['app_ApplicationName']?></option>
+                            <?php } ?>
+                        </select>
+                    </td>
                     <td><input type="text" id="txt_start_date" name="txt_start_date"
                             <?php  echo $_SERVER['REQUEST_METHOD'] == 'POST' ? 'value="'.date('m/d/Y', strtotime($start_date)).'"' : ''; ?> /></td>
                     <td><input type="text" id="txt_end_date" name="txt_end_date"
@@ -115,19 +129,86 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
             <?php
             if($_SERVER['REQUEST_METHOD'] == 'POST')
             {
-                ?>
-                <br/>
-                <table border="1" class="rwd-table">
-                    <tr>
-                        <th>Application</th>
-                        <th>CAC Estimated</th>
-                        <th>Planned (PTS)</th>
-                        <th>Lets Clock Hours</th>
-                        <th>Difference: CAC-Lets Clock</th>
-                        <th>Difference: PTS-Lets Clock</th>
-                    </tr>
-                </table>
-                <?php
+                echo "<br/>";
+                $selected_app = $_REQUEST['ddl_application'];
+                $sql_select_claim_status_resource = "select distinct res.res_Name as name, res.res_SlNo as rid, app.app_ApplicationName
+                                            from ".$db.".tbl_application app, ".$db.".tbl_claim_data cd, ".$db.".tbl_claim_time ct, ".$db.".tbl_resourceinfo res
+                                            where 
+                                            app.app_SlNo = cd.app_slno and 
+                                            ct.cd_slno = cd.cd_slno and 
+                                            cd.res_slno = res.res_SlNo and 
+                                            cd.cd_claim_dt BETWEEN '".date('Y-m-d', strtotime($start_date))."' and '".date('Y-m-d', strtotime($end_date))."' and
+                                            app.app_SlNo = ".$selected_app."
+                                            group by cd.res_slno, app.app_ApplicationName, cd.cd_claim_dt";
+                $rs_select_claim_status_resource = $mysqli->query($sql_select_claim_status_resource);
+                while($row = mysqli_fetch_array($rs_select_claim_status_resource)) {
+                    ?>
+                    <div class="tab-pane no-padding" id="11">
+                        <dl class="accordion">
+                            <dt>
+                                <a> Team: <?php echo $row['app_ApplicationName']; ?> &mdash; <b></b><?php echo $row['name']; ?></b><span><i
+                                            class="fa fa-angle-right"></i></span></a>
+                            </dt>
+                            <dd class="hideIt" style="float: inherit;">
+                                <table class="rwd-table no-margin" style="font-weight: bold; color: black; width: 100%;">
+                                    <tr>
+                                        <th width="30%">Claim Date</th>
+                                        <th width="30%">Claimed Hours</th>
+                                        <th width="30%">Claimed Status</th>
+                                        <!--<th width="30%" style="text-align: center;">Actions</th>-->
+                                    </tr>
+                                    <?php
+                                        $sql_select_claim_status = "select res.res_Name as name, cd.cd_claim_dt as cdt,  sum(ct.ct_duration) as claimed_hrs, cd.cd_status as status
+                                                                    from ".$db.".tbl_claim_data cd, ".$db.".tbl_claim_time ct, ".$db.".tbl_resourceinfo res
+                                                                    where 
+                                                                    ct.cd_slno = cd.cd_slno and 
+                                                                    cd.cd_claim_dt BETWEEN '".date('Y-m-d', strtotime($start_date))."' and '".date('Y-m-d', strtotime($end_date))."' and 
+                                                                    cd.app_SlNo = ".$selected_app." AND
+                                                                    cd.res_slno = '".$row['rid']."' and 
+                                                                    res.res_SlNo = cd.res_slno
+                                                                    group by cd.res_slno, cd.cd_claim_dt, cd.cd_status";
+                                    $rs_select_claim_status = $mysqli->query($sql_select_claim_status);
+                                    while($row1 = mysqli_fetch_array($rs_select_claim_status))
+                                    {
+                                        ?>
+                                        <tr>
+                                            <td data-th="Claim Date">
+                                                <a href="#">
+                                                    <?php echo date('l', strtotime($row1['cdt'])) . ' - ' . date('d', strtotime($row1['cdt'])); ?>
+                                                    <sup><?php echo date('S', strtotime($row1['cdt'])); ?></sup>
+                                                </a>
+                                            </td>
+                                            <td data-th="Claim Hours">
+                                                <a href="#">
+                                                    <?php echo time_hr_sec($row1['claimed_hrs']); ?>Hrs.
+                                                </a>
+                                            </td>
+                                            <td data-th="Claim Status">
+                                                <a href="#">
+                                                    <?php echo $row1['status']; ?>
+                                                </a>
+                                            </td>
+<!--                                            <td data-th="Action" style="text-align: center;">-->
+<!--                                                <a href="view_Time.php--><?php //echo 'data'; ?><!--">-->
+<!--                                                    <i class="fa fa-eye text-info" data-toggle="tooltip"-->
+<!--                                                       data-placement="left" title="View Time Record"></i>-->
+<!--                                                </a>-->
+<!--                                            </td>-->
+                                        </tr>
+                                        <?php
+                                    }
+
+                                    ?>
+
+                                    </a>
+                                </table>
+
+                            </dd>
+                        </dl>
+                        <div class="clearfix"></div>
+                    </div>
+                    <?php
+                }
             }
             ?>
         </form>
@@ -139,6 +220,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
     <?php include_once 'footer.php'; ?>
 </section>
 <?php include_once 'script.php'; ?>
-
+<script src="js/jquery.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/datetimepicker.js"></script>
+<script type="text/javascript" src="js/includes/timeLogs.js"></script>
+<script src="js/custom.js" type="text/javascript"></script>
 </body>
 </html>

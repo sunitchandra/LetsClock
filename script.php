@@ -29,7 +29,7 @@ $("#txt_start_date").datepicker({
     }
 });
 
-$("#txt_end_date").datepicker({ 
+$("#txt_end_date").datepicker({
     minDate: 0,
     maxDate:"1970/12/99",
     onSelect: function(selected) {
