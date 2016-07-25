@@ -88,7 +88,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 	
 	<div class="container">
 		<div class="content">
-			<h3>Effort Compasion Across CAC, PTS and Let's Clock</h3>
+			<h3>Effort Comparison Across CAC, PTS and Let's Clock</h3>
 			<form action="report_effort_compare.php" method="post">
 			<table class="rwd-table no-margin" style="font-weight: bold; color: black; width: 150px;">
 				<tr>

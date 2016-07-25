@@ -19,4 +19,3 @@ if (isset ( $_REQUEST ['cd_slno'] ) && ! empty ( $_REQUEST ['cd_slno'] )
 	}
 }
 
-?>

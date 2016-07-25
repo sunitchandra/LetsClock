@@ -21,4 +21,3 @@ Class ChunkReadFilter implements PHPExcel_Reader_IReadFilter {
     }
 
 }
-?>

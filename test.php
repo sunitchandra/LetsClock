@@ -7,4 +7,3 @@
 	$heading=($_GET['heading']);
 	//$mysql=$_GET['mysqli'];
 	$exp->exportWithQuery($query,$file_name,$con,$heading);
-?>
