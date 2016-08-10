@@ -167,8 +167,8 @@ if(isset($_REQUEST['start_rel_dt']) && !empty($_REQUEST['start_rel_dt'])
 							FROM ".$db.".tbl_claim_data cd, ".$db.".tbl_claim_time ct, ".$db.".tbl_application app
 							WHERE ct.cd_slno = cd.cd_slno 
 							 AND cd.cd_release_dt BETWEEN '$start_rel_dt' AND '$end_rel_dt' 
-							 AND cd.app_slno IN($res_team_id) 
-							 AND app.app_SlNo IN($res_team_id)
+							 AND cd.app_slno IN ($res_team_id) 
+							 AND app.app_SlNo IN ($res_team_id)
 							 AND app.app_SlNo = cd.app_slno
 							 AND cd.cd_status = 'Active'
 							 AND ct.ct_status = 'Active'
@@ -177,6 +177,7 @@ if(isset($_REQUEST['start_rel_dt']) && !empty($_REQUEST['start_rel_dt'])
 							  cd.app_slno, cd.cd_release_dt, cd.cd_claim_code
 							ORDER BY 
 							  cd.cd_release_dt";
+		echo $sql_select_mpa;
 		$rs_select_mpa = $mysqli->query($sql_select_mpa);
 		while($row3 = mysqli_fetch_array($rs_select_mpa))
 		{

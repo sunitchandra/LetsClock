@@ -105,7 +105,7 @@ $sql_select_claim_data = "SELECT cd.cd_slno AS cdslno, app.app_ApplicationName A
 						AND cd.res_slno = '".$res_slno."'
 						AND year(cd.cd_claim_dt) = '".$cyr."'
 						AND month(cd.cd_claim_dt) = '".$cmonth."'
-						GROUP BY cd.cd_claim_dt, cd.cd_claim_sub_code, cd.cd_claim_code, appname, cd.cd_comments
+						GROUP BY cd.cd_claim_dt, cd.cd_claim_sub_code, cd.cd_claim_code, appname, cd.cd_comments, cd.cd_release_dt
 						ORDER BY cd.cd_claim_dt, appname, cd.cd_release_dt";
 //echo $sql_select_claim_data;
 ?>

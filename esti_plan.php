@@ -168,19 +168,33 @@ if(isset($_REQUEST['e']))
 						</select>
 					</td>
 					<td>Select Resource:</td>
+					<?php
+					$tname = array();
+					for($i = 0; $i < sizeof($team_handle_name); $i++)
+					{
+						$tname[$i] = $team_handle_name[$i];
+					}
+					$tname = get_team_id_with_comma($tname);
+					$tname_exp = explode(',',$tname);
+					$size = count($tname_exp);
+					if($size == 1)
+					{
+						$sql_select_resource_info = "SELECT * FROM ".$db.".tbl_resourceinfo where res_team LIKE '%".$tname_exp[0]."%'  ";
+					}
+					else
+					{
+						$sql_select_resource_info = "SELECT * FROM ".$db.".tbl_resourceinfo where res_team LIKE '%".$tname_exp[0]."%'  ";
+						for($p = 1; $p < $size; $p++)
+						{
+							$sql_select_resource_info .= "OR res_team LIKE '%".$tname_exp[$p]."%' ";
+						}
+					}
+					?>
 					<td><select name="ddl_resource_name" id="ddl_resource_name" onclick="getResourceName(this)" class="form-control"
 					 style="border-radius: 8px;width: auto;">
 							<!-- <option value="">---Resource Name---</option> -->
 							<?php 
-							$tname = array();
-							for($i = 0; $i < sizeof($team_handle_name); $i++)
-							{
-								$tname[$i] = "'".$team_handle_name[$i]."'";
-							}
-							$tname = get_team_id_with_comma($tname);
 							
-							$sql_select_resource_info = "SELECT * FROM ".$db.".tbl_resourceinfo where res_team in (".$tname.")";
-							echo $sql_select_resource_info;
 							$rs_select_resource_info = $mysqli->query($sql_select_resource_info);
 							while ($row = mysqli_fetch_array($rs_select_resource_info))
 							{
