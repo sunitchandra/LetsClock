@@ -177,7 +177,7 @@ if(isset($_REQUEST['start_rel_dt']) && !empty($_REQUEST['start_rel_dt'])
 							  cd.app_slno, cd.cd_release_dt, cd.cd_claim_code
 							ORDER BY 
 							  cd.cd_release_dt";
-		echo $sql_select_mpa;
+		//echo $sql_select_mpa;
 		$rs_select_mpa = $mysqli->query($sql_select_mpa);
 		while($row3 = mysqli_fetch_array($rs_select_mpa))
 		{

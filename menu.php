@@ -13,10 +13,13 @@
         				$fileName == 'report_loe.php' || 
         				$fileName == 'report_effort_compare.php' ||
         				$fileName == 'report_vacation.php' ||
-						$fileName == 'report_claim_status.php') echo 'style="background-color: #d94d3f !important; color: #ffffff; font-weight: bold;font-style: italic;"'; ?>>Reports
+						$fileName == 'report_claim_status.php') 
+					echo 'style="background-color: #d94d3f !important; color: #ffffff; font-weight: bold;font-style: italic;"'; ?>>
+					Reports
         <span class="caret"></span></a>
         <ul class="dropdown-menu">
           <li><a href="report.php">Daywise Burned LC Report</a></li>
+          <li><a href="report_pts_data.php">PTS Data Report</a></li>
           <?php
 		if(isset($_COOKIE['res_role']))
 		{
