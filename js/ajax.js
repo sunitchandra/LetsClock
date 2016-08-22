@@ -148,6 +148,54 @@ function getClaimDataAll(res_npt, res_slno) {
 		}
 	})
 }
+
+
+//To get data based on release dates selected from pts year
+function getReleaseDatePTS(application_id) {
+	$.ajax({
+		data:'application_id='+application_id.value,
+		url: "getData6.php",
+		success: function(data){
+			//console.log(data);
+			$('#ddl_release_year').empty();
+			$('#ddl_release_year').append(data);
+		}
+	})
+}
+
+//To get data based on release dates selected from pts year
+function getPTSReleaseDates(release_year) {
+	var app_id = document.getElementById("ddl_application").value;
+	$.ajax({
+		data:'ryear='+release_year.value+'&application_id1='+app_id,
+		url: "getData6.php",
+		success: function(data){
+			console.log(data);
+			$('#ddl_release_date_start').empty();
+			$('#ddl_release_date_start').append(data);
+			$('#ddl_release_date_end').empty();
+			$('#ddl_release_date_end').append(data);
+		}
+	})
+}
+
+
+//To get data based on release dates selected from pts year
+function getAllPTSData(notA) {
+	var app_id = document.getElementById("ddl_application").value;
+	var release_year = document.getElementById("ddl_release_year").value;
+	var start_rdt = document.getElementById("ddl_release_date_start").value;
+	var end_rdt = document.getElementById("ddl_release_date_end").value;
+	$.ajax({
+		data:'ryear='+release_year+'&app_id1='+app_id+'&srdt='+start_rdt+'&erdt='+end_rdt,
+		url: "getData6.php",
+		success: function(data){
+			//console.log(data);
+			$('#div_pts_data').empty();
+			$('#div_pts_data').append(data);
+		}
+	})
+}
 //To get the previous claim data of selected date
 /*function getClaimData(claim_dt) {
 	var application = $(pr_num).parent().prev().prev().find('select').val();
