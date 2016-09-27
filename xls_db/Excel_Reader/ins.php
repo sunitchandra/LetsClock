@@ -1,10 +1,17 @@
 <?php
 error_reporting ( E_ALL );
-echo 'Hello';
+clearstatcache();
+mb_internal_encoding("8bit");
+echo ini_get('upload_max_filesize');
+
+echo 'Hello_Encoded';
 echo '<pre>';
 
 include_once '../../config/db_connection.php';
 include_once '../reader.php';
+
+$counter = 0;
+
 print_r($_FILES);
 $fileName = '';
 if (isset ( $_FILES ['loe_upload'] )) {
@@ -17,7 +24,7 @@ if (isset ( $_FILES ['loe_upload'] )) {
 
 // To get the data from Excel sheet
 $obj_excel_reader = new Spreadsheet_Excel_Reader ();
-$obj_excel_reader->read('loe.xls' );
+$obj_excel_reader->read('loe.xls', true );
 
 // $obj_excel_reader->read('LOE Report');
 
@@ -39,6 +46,7 @@ $x = 2;
 $mysqli->autocommit ( FALSE );
 
 //Truncate Tables
+$mysqli->query ( "TRUNCATE ".$db.".tbl_ptsdata" );
 $mysqli->query ( "TRUNCATE ".$db.".tbl_ptsdata_bckup" );
 
 echo "Truncating Tables successful..!!<br/>";
@@ -55,7 +63,7 @@ while ( $x <= $obj_excel_reader->sheets [0] ['numRows'] ) {
 	$charge_to = $mysqli->real_escape_string ( excel_read($obj_excel_reader, $x, 3) );
 	$crno = $mysqli->real_escape_string ( excel_read($obj_excel_reader, $x, 4) );
 	$release_dt = $mysqli->real_escape_string ( excel_read($obj_excel_reader, $x, 5) );
-	$pname = substr($mysqli->real_escape_string ( excel_read($obj_excel_reader, $x, 6) ), 0,100);
+	$pname = $mysqli->real_escape_string ( excel_read($obj_excel_reader, $x, 6) );
 	$comit_status = $mysqli->real_escape_string ( excel_read($obj_excel_reader, $x, 7) );
 	$dtv_resource = $mysqli->real_escape_string ( excel_read($obj_excel_reader, $x, 8) );
 	$ibm_prep = $mysqli->real_escape_string ( excel_read($obj_excel_reader, $x, 9) );
@@ -67,20 +75,19 @@ while ( $x <= $obj_excel_reader->sheets [0] ['numRows'] ) {
 	$todate = '';
 
 	//Validate release date is actually a date and not a number or string
-	if((bool)strtotime($release_dt))
+	if(strtotime($release_dt))
 	{
 		$todate = date_format(date_create($release_dt), 'Y-m-d');
-		$sql_insert_ptsdata_temp = "INSERT INTO ".$db.".tbl_ptsdata_bckup VALUES ('', '', '" . $application . "', '" . $pno . "', '" . $charge_to . "', '" . $crno . "',
-'" . $todate . "', '" . $pname . "', '" . $comit_status . "', '" . $dtv_resource . "', '" . $ibm_prep . "', '" . $ibm_exec . "',
-'" . $dtv_contract . "', '" . $tnm . "', '" . $ibmas . "')";
+		$sql_insert_ptsdata_temp = "INSERT INTO ".$db.".tbl_ptsdata_bckup VALUES ('', '', '" . $application . "', '" . $pno . "', '" . $charge_to . "', '" . $crno . "','" . $todate . "', '" . $pname . "', '" . $comit_status . "', '" . $dtv_resource . "', '" . $ibm_prep . "', '" . $ibm_exec . "','" . $dtv_contract . "', '" . $tnm . "', '" . $ibmas . "')";
 		$rs_insert_ptsdata_temp = $mysqli->query ( $sql_insert_ptsdata_temp );
 		//echo $sql_insert_ptsdata_temp.'<br/>';
 	}
 	$x ++;
 }
+echo '<br/>'.$x;
 
 if ($rs_insert_ptsdata_temp) {
-	echo "Inserting into tbl_ptsdata_bckup completed..!!<br/>";
+	echo "Inserting into tbl_ptsdata_bckup completed..!! :) <br/>";
 }
 
 
@@ -167,9 +174,9 @@ $sql_select_sum_ptsdata_bckup = "SELECT app_SlNo ,pts_ApplicationName,pts_Projec
 								sum( pts_IBMExec ) AS sumIBMExec, sum( pts_DTVContractors ) AS sumDTVContractors,
 								sum( pts_IBMTnM ) AS sumIBMTnM, sum( pts_IBMAS ) AS sumIBMAS
 								FROM ".$db.".tbl_ptsdata_bckup
-								GROUP BY pts_ApplicationName , pts_ReleaseDate, pts_ProjectNum
-								ORDER BY pts_SlNo ";
-//echo $sql_select_sum_ptsdata_bckup;
+								GROUP BY pts_ApplicationName , pts_ReleaseDate, pts_ProjectNum, pts_commit_status
+								ORDER BY app_SlNo ";
+echo $sql_select_sum_ptsdata_bckup;
 
 $rs_select_sum_ptsdata_bckup = $mysqli->query($sql_select_sum_ptsdata_bckup);
 
@@ -292,12 +299,10 @@ else // $data_pts_size < 0
 	for($i = 0; $i < $ptsdata_replica_size; $i++)
 	{
 		
-		$sql_insert_pts = "insert into ".$db.".tbl_ptsdata values('', '".$ptsdata_replica[$i][0]."', '".$ptsdata_replica[$i][1]."','".$ptsdata_replica[$i][2]."', '".$ptsdata_replica[$i][3]."','".$ptsdata_replica[$i][4]."',
-												'".date('Y-m-d',strtotime($ptsdata_replica[$i][5]))."','".$ptsdata_replica[$i][6]."', '".$ptsdata_replica[$i][7]."','".$ptsdata_replica[$i][8]."',
-												'".$ptsdata_replica[$i][9]."','".$ptsdata_replica[$i][10]."', '".$ptsdata_replica[$i][11]."','".$ptsdata_replica[$i][12]."', '".$ptsdata_replica[$i][13]."')";
+		$sql_insert_pts = "insert into ".$db.".tbl_ptsdata values('', '".$ptsdata_replica[$i][0]."', '".$ptsdata_replica[$i][1]."','".$ptsdata_replica[$i][2]."', '".$ptsdata_replica[$i][3]."','".$ptsdata_replica[$i][4]."','".date('Y-m-d',strtotime($ptsdata_replica[$i][5]))."','".$ptsdata_replica[$i][6]."', '".$ptsdata_replica[$i][7]."','".$ptsdata_replica[$i][8]."','".$ptsdata_replica[$i][9]."','".$ptsdata_replica[$i][10]."', '".$ptsdata_replica[$i][11]."','".$ptsdata_replica[$i][12]."', '".$ptsdata_replica[$i][13]."')";
 		$rs_insert_pts = $mysqli->query($sql_insert_pts);
-		echo $sql_insert_pts.'<br/>';
-		echo "New Insert<br/>";
+		echo $sql_insert_pts.';<br/>';
+		//echo "New Insert: ".$counter++."<br/>";
 	}
 }
 
