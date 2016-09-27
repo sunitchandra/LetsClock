@@ -28,11 +28,12 @@
 					strtolower($_COOKIE['res_role']) == strtolower('BAM') ||
 					strtolower($_COOKIE['res_role']) == strtolower('TDL') ||
 					strtolower($_COOKIE['res_role']) == strtolower('PTC') ||
+					strtolower($_COOKIE['res_role']) == strtolower('SME') ||
 					strtolower($_COOKIE['res_role']) == strtolower('ETC'))
 			{
 	?>
 				<li><a href="report_loe.php">LOE Received Vs Burned</a></li>
-				<li><a href="report_effort_compare.php">Effort Compare CAC vs PTS vs LC</a></li>
+				<!-- <li><a href="report_effort_compare.php">Effort Compare CAC vs PTS vs LC</a></li> -->
 				<li><a href="report_vacation.php">Vacation Report</a></li>
 				<li><a href="report_claim_status.php">Claim Status</a></li>
           <?php

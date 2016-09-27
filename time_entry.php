@@ -194,7 +194,8 @@ for($i = 0; $i < count ( $time_line ); $i ++) {
 										AND cd.res_slno = '".$res_slno."'
 										AND year(cd.cd_claim_dt) = '".$cyr."'
 										AND month(cd.cd_claim_dt) = '".$cmonth."'
-										GROUP BY cd.cd_claim_dt, cd.cd_claim_sub_code, cd.cd_claim_code, cd.cd_comments
+										GROUP BY cd.cd_slno, app.app_ApplicationName, cd.app_slno, cd.cd_release_dt, cd.cd_claim_dt, cd.cd_comments,
+										cd.cd_claim_code
 										ORDER BY cd.cd_claim_dt, appname, cd.cd_release_dt";
 						//echo $sql_select_claim_data;
 						$rs_select_claim_data = $mysqli->query($sql_select_claim_data);

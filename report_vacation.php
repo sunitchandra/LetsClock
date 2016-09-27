@@ -249,7 +249,7 @@ $team_names = $data_select_team_handle_name['res_team_handle'];
 					</div>
 					
 					
-				<!-- <div class="row">
+					<div class="row">
 						<div class="col-sm-6 col-md-12">
 							<div class="thumbnail">
 								<div class="caption">
@@ -316,10 +316,10 @@ $team_names = $data_select_team_handle_name['res_team_handle'];
 									$hours_var_sl = ArrayToString($sl, 0,'');
 									$hours_var_holiday = ArrayToString($holiday, 0,'');
 									
-									echo '<pre>';
+									//echo '<pre>';
 									$date_array = array_values(array_unique($date_array));
 									$count = sizeof($date_array);
-									echo $count;
+									//echo $count;
 									for($i = 0; $i < $count; $i++)
 									{
 										if($i == $count-1)
@@ -444,7 +444,7 @@ $team_names = $data_select_team_handle_name['res_team_handle'];
 								</div>
 							</div>
 						</div>
-					</div> -->
+					</div> 
 				</div>
 			<?php
 			}

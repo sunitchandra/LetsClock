@@ -135,7 +135,7 @@ if(isset($_REQUEST['start_rel_dt']) && !empty($_REQUEST['start_rel_dt'])
 							and ct.ct_status = 'Active' */
 							group by pts.app_SlNo, pts.pts_ReleaseDate, pts.pts_ProjectNum
 							order by cd.cd_release_dt";
-	//echo $sql_select_claim_dates;
+	echo $sql_select_claim_dates;
 	$rs_select_claim_date = $mysqli->query($sql_select_claim_dates);
 	$row_select_claim_date = $rs_select_claim_date->num_rows;
 	//echo $row_select_claim_date;
@@ -212,3 +212,31 @@ if(isset($_REQUEST['start_rel_dt']) && !empty($_REQUEST['start_rel_dt'])
 		<td><?php echo time_hr_sec($total_clocked); ?> Hrs.</td>
 		<td><?php //echo time_hr_sec($total_diff); ?> </td>
 	</tr>
+	
+	
+	<!-- 
+	SELECT
+  app.app_ApplicationName AS app_name,
+  pts.pts_releaseDate AS rdt,
+  pts.pts_ProjectNum AS pr_num,
+  ((SUM(pts.pts_IBMPrep)/SUM(ct.ct_duration))/2) as ibm_prep,
+   ((SUM(pts.pts_IBMExec)/SUM(ct.ct_duration))/2) as ibm_exec,
+  (((SUM(pts.pts_IBMPrep)/SUM(ct.ct_duration))/2) + ((SUM(pts.pts_IBMExec)/SUM(ct.ct_duration))/2)) as total_hrs,
+  SUM(ct.ct_duration) AS clocked_sum,
+  (((SUM(pts.pts_IBMPrep)/SUM(ct.ct_duration))/2) + ((SUM(pts.pts_IBMExec)/SUM(ct.ct_duration))/2))-SUM(ct.ct_duration) as diff
+FROM
+  tbl_ptsdata pts,
+  tbl_claim_data cd,
+  tbl_claim_time ct,
+  tbl_application app
+WHERE
+  pts.app_SlNo = app.app_SlNo AND pts.pts_ProjectNum = cd.cd_claim_code AND ct.cd_slno = cd.cd_slno AND pts.app_SlNo = cd.app_slno AND pts.pts_ReleaseDate BETWEEN '2016-01-26' AND '2016-12-31' AND cd.cd_release_dt BETWEEN '2016-07-26' AND '2016-12-31' AND cd.app_slno IN(35,
+  41) AND app.app_SlNo IN(35,
+  41)
+  GROUP BY
+  pts.app_SlNo,
+  pts.pts_ReleaseDate,
+  pts.pts_ProjectNum
+ORDER BY
+  cd.cd_release_dt
+	 -->
